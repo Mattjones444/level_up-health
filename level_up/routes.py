@@ -33,12 +33,13 @@ def login():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
-
         user = Users.query.filter_by(username=username).first()
+        
         if not user or not (user.password, password):
             flash('Please check your login details and try again.')
             return redirect(url_for("login"))
         else:
+            session["username"] = username
             return redirect(url_for("dashboard"))
         
     return render_template("login.html")
@@ -46,5 +47,8 @@ def login():
 
 @app.route("/dashboard")
 def dashboard():
+    if "username" in session:
+        username = session["username"]
+        return f"<h1>Hello {username} </h1>"
     return render_template("dashboard.html")
 
