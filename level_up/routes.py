@@ -49,6 +49,6 @@ def login():
 def dashboard():
     if "username" in session:
         username = session["username"]
-        return f"<h1>Hello {username} </h1>"
+        return f"<h1>Hello {username} </h1>" 
     return render_template("dashboard.html")
-
+    
