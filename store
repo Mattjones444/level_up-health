@@ -1,0 +1,4 @@
+ # check if username exists in db
+        existing_user = Users(
+            username=request.form.get("username"),
+            password=request.form.get("password")
