@@ -2,7 +2,7 @@ from flask import render_template
 from level_up import app, db
 from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
-from level_up.models import Users, Profile, Categories, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions
+from level_up.models import Users, Profile, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions
 
 
 @app.route("/")
@@ -57,4 +57,20 @@ def dashboard():
 @app.route("/choose_intention")
 def choose_intention():
     return render_template("choose_intention.html")
+
+@app.route("/exercise_intention")
+def exercise_intention():
+    return render_template("exercise_intention.html")
+
+
+@app.route("/add_category", methods=["GET", "POST"])
+def add_category():
+    if request.method == "POST":
+        category = Category(category_name=request.form.get("category_name"))
+        db.session.add(category)
+        db.session.commit()
+        return redirect(url_for("choose_intention"))
+    return render_template("add_intention.html")
+
+
     

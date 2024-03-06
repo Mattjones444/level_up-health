@@ -1,5 +1,6 @@
 from level_up import db
 
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique = True, nullable = False)
@@ -24,12 +25,15 @@ class Profile(db.Model):
 
 
 
-class Categories(db.Model):
+class Category(db.Model):
+    # schema for the Category model
     id = db.Column(db.Integer, primary_key=True)
-    hydration = db.Column(db.String, unique=True, nullable=False)
-    exercise = db.Column(db.String, unique=True, nullable=False)
-    mindfulness = db.Column(db.String, unique=True, nullable=False)
-    sleep = db.Column(db.String, unique=True, nullable=False)
+    category_name = db.Column(db.String(25), unique=True, nullable=False)
+    
+
+    def __repr__(self):
+        # __repr__ to represent itself in the form of a string
+        return self.category_name
 
 
     def __repr__(self):
@@ -39,6 +43,8 @@ class Categories(db.Model):
 
 class Hydration_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    intention_name = db.Column(db.String, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
         return self
@@ -47,7 +53,7 @@ class Hydration_intentions(db.Model):
 
 class Exercise_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    exercise_name = db.Column(db.String, unique=True, nullable=False)
+    intention_name = db.Column(db.String, unique=True, nullable=False)
     health_points = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
@@ -56,6 +62,8 @@ class Exercise_intentions(db.Model):
 
 class Mindfulness_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    intention_name = db.Column(db.String, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
         return self
@@ -64,6 +72,8 @@ class Mindfulness_intentions(db.Model):
 
 class Sleep_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
+    intention_name = db.Column(db.String, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, unique=True, nullable=False)
+ 
     def __repr__(self):
         return self
