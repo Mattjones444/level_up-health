@@ -53,4 +53,8 @@ def dashboard():
     return render_template("dashboard.html", username=username)
 
     return render_template("dashboard.html")
+
+@app.route("/choose_intention")
+def choose_intention():
+    return render_template("choose_intention.html")
     

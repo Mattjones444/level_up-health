@@ -47,6 +47,8 @@ class Hydration_intentions(db.Model):
 
 class Exercise_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    exercise_name = db.Column(db.String, unique=True, nullable=False)
+    health_points = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
         return self
