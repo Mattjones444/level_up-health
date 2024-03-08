@@ -30,6 +30,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(25), unique=True, nullable=False)
     
+    
 
     def __repr__(self):
         # __repr__ to represent itself in the form of a string
@@ -44,6 +45,7 @@ class Category(db.Model):
 class Hydration_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
+    category_name = db.Column(db.String, unique=False, nullable=False)
     health_score = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
@@ -54,7 +56,8 @@ class Hydration_intentions(db.Model):
 class Exercise_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
-    health_points = db.Column(db.Integer, unique=True, nullable=False)
+    category_name = db.Column(db.String, unique=False, nullable=False,)
+    health_score = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
         return self
@@ -63,6 +66,7 @@ class Exercise_intentions(db.Model):
 class Mindfulness_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
+    category_name = db.Column(db.String, unique=False, nullable=False)
     health_score = db.Column(db.Integer, unique=True, nullable=False)
 
     def __repr__(self):
@@ -73,6 +77,7 @@ class Mindfulness_intentions(db.Model):
 class Sleep_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
+    category_name = db.Column(db.String, unique=False, nullable=False)
     health_score = db.Column(db.Integer, unique=True, nullable=False)
  
     def __repr__(self):

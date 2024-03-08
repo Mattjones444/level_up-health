@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class=" white-text center-align">Hydration Intentions</h3> 
+<div class="row">
+    {% for hydration in hydrations %}
+    <div class="col s12 m4">
+      <div class="card">
+        <div class="card-image">
+          <img src="/static/images/exercise1.jpg">
+          <a class="btn-floating btn-medium halfway-fab waves-effect waves-light green left text center-align"></i>{{ Hydration_intentions.health_score}}</a>
+          <span class="card-title">{{Hydration_intentions.intention_name}}</span>
+        </div>
+        <div class="card-content">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

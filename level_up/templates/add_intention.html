@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3>Add an Intention</h3>
+<h3>Category</h3>
 
 <div class="row card-panel grey lighten-5">
     <form class="col s12" method="POST" action="{{ url_for('add_category') }}">
@@ -12,6 +12,43 @@
                 <input id="category_name" name="category_name" minlength="5" maxlength="50" type="text" class="validate" required>
                 <label for="category_name">Category Name</label>
             </div>
+            <div class="row">
+                <div class="col s12 center-align">
+                    <button type="submit" class="btn-large light-blue darken-1">
+                        Add Task <i class="fas fa-plus-square right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<h3>Intention</h3>
+
+<div class="row card-panel grey lighten-5">
+    <form class="col s12" method="POST" action="{{ url_for('add_intention') }}">
+        <!-- task name -->
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-pencil-alt prefix light-blue-text text-darken-4"></i>
+                <input id="intention_name" name="intention_name" minlength="5" maxlength="50" type="text" class="validate" required>
+                <label for="intention_name">Intention Name</label>
+            </div>
+            <div class="input-field col s12">
+                <select id="type" name="category_name">
+                  <option value="" disabled selected>Choose your option</option>
+                  {% for Category in categories %}
+                  <option value="{{ Category.category_name }}">{{Category.category_name}}</option>
+                  {% endfor %}
+                </select>
+                <label>Materialize Select</label>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                    <i class="fas fa-pencil-alt prefix light-blue-text text-darken-4"></i>
+                    <input id="health_score" name="health_score" minlength="0" maxlength="50" type="text" class="validate" required>
+                    <label for="health_score">Health Score</label>
+                </div>
             <div class="row">
                 <div class="col s12 center-align">
                     <button type="submit" class="btn-large light-blue darken-1">
