@@ -76,8 +76,9 @@ def add_category():
 
 @app.route("/add_intention", methods=["GET", "POST"])
 def add_intention():
+    categories = list(Category.query.order_by(Category.category_name).all())
     if request.method == "POST":
-        new_intention = Hydration_intentions(    
+        new_intention = Mindfulness_intentions(    
             intention_name=request.form.get("intention_name"),
             category_name=request.form.get("category_name"),
             health_score=request.form.get("health_score")
@@ -85,12 +86,19 @@ def add_intention():
         db.session.add(new_intention)
         db.session.commit()
         return redirect(url_for("add_intention"))
-    return render_template("add_intention.html", new_intention=new_intention)
+    return render_template("add_intention.html", categories=categories)
 
 
 @app.route("/hydration_intentions")
 def hydration_intentions():
-    return render_template("hydration_intentions.html")
+    hydration = list(Hydration_intentions.query.order_by(Hydration_intentions.intention_name).all())
+    return render_template("hydration_intentions.html", hydration=hydration)
+
+
+@app.route("/mindfulness_intentions")
+def mindfulness_intentions():
+    mindfulness = list(Mindfulness_intentions.query.order_by(Mindfulness_intentions.intention_name).all())
+    return render_template("mindfulness_intentions.html", mindfulness=mindfulness)
 
 
 
