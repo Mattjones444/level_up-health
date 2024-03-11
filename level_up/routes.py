@@ -78,7 +78,7 @@ def add_category():
 def add_intention():
     categories = list(Category.query.order_by(Category.category_name).all())
     if request.method == "POST":
-        new_intention = Mindfulness_intentions(    
+        new_intention = Exercise_intentions(    
             intention_name=request.form.get("intention_name"),
             category_name=request.form.get("category_name"),
             health_score=request.form.get("health_score")
@@ -99,6 +99,16 @@ def hydration_intentions():
 def mindfulness_intentions():
     mindfulness = list(Mindfulness_intentions.query.order_by(Mindfulness_intentions.intention_name).all())
     return render_template("mindfulness_intentions.html", mindfulness=mindfulness)
+
+@app.route("/sleep_intentions")
+def sleep_intentions():
+    sleep = list(Sleep_intentions.query.order_by(Sleep_intentions.intention_name).all())
+    return render_template("sleep_intentions.html", sleep=sleep)
+
+@app.route("/exercise_intentions")
+def exercise_intentions():
+    exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+    return render_template("exercise_intentions.html", exercise=exercise)
 
 
 
