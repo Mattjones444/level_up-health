@@ -17,7 +17,7 @@ class Profile(db.Model):
     height = db.Column(db.Integer, unique=False, nullable=False)
     weight = db.Column(db.Integer, unique=False, nullable=False)
     smoker = db.Column(db.Boolean, default=False, nullable=False)
-    my_intentions = db.Column(db.String, unique=True, nullable=False)
+    intentions = db.relationship("My_intentions", backref="category", cascade="all, delete", lazy=True)
 
     
     def __repr__(self):
@@ -29,6 +29,17 @@ class Category(db.Model):
     # schema for the Category model
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(25), unique=True, nullable=False)
+
+
+class My_intentions(db.Model):
+    # schema for the user's intentions
+    id = db.Column(db.Integer, primary_key=True)
+    intention_name = db.Column(db.String(50), unique=True, nullable=False)
+    health_score = db.Column(db.Integer, unique=True, nullable=False)
+    due_date = db.Column(db.Date, nullable=False)
+    Profile_id = db.Column(db.Integer, db.ForeignKey("profile.id", ondelete="CASCADE"), nullable=False)
+
+
     
     
 

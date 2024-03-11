@@ -111,5 +111,19 @@ def exercise_intentions():
     return render_template("exercise_intentions.html", exercise=exercise)
 
 
+@app.route("/my_intentions", methods=["GET", "POST"])
+def my_intentions():
+    exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+    if request.method == "POST":
+        my_new_intention = My_intentions( 
+        intention_name = request.form.get("intention_name"),
+        health_score = request.form.get("health_score"),
+        due_date = request.form.get("due_date"),
+        intention_id = request.form.get("intention_id")
+        )
+        print(my_new_intention)
+        db.session.add(my_new_intention)
+        db.session.commit()
+        
 
-    
+    return render_template("my_intentions.html", exercise=exercise)

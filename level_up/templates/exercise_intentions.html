@@ -11,13 +11,44 @@
           <img src="/static/images/exercise1.jpg">
           <a class="btn-floating btn-medium halfway-fab waves-effect waves-light green left text center-align"></i>{{ Exercise_intentions.health_score}}</a>
           <span class="card-title">{{ Exercise_intentions.intention_name}}</span>
-          <a href="{{ url_for('add_intention') }}" class="btn-floating halfway-fab waves-effect pulse waves-light red"><i class="fas fa-plus"></i></a>
+          <a id="modal1" class="btn-floating halfway-fab waves-effect pulse waves-light red"><i class="fas fa-plus"></i></a>
         </div>
         <div class="card-content">
         </div>
       </div>
     </div>
-    {% endfor %}
-  </div>
 
+    <!--Modal Popup-->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+          <h4 class="center-align">Add Intention</h4>
+          <form method="POST" action="{{ url_for('my_intentions') }}">
+            <div class="row">
+                <div class="input-field col s6">
+                  <input name="intention_name" id="intention_name" type="text" class="validate">
+                  <label for="intention_name">{{Exercise_intentions.intention_name}}</label>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                      <input name="health_score" id="health_score" type="text" class="validate">
+                      <label for="health_score">{{Exercise_intentions.health_score}}</label>
+                    </div>
+                    <label for="due_date">Choose a date</label>
+                    <input class="datepicker validate" name="due_date" id="due_date" required>
+                    
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                      <input disabled value="" id="intention_id" name="intention_id" type="text" class="validate">
+                      <label for="intention_id">{{Exercise_intentions.id}}</label>
+                    </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Set Intention</a>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}
