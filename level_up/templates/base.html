@@ -18,11 +18,12 @@
             <a href="#" data-target="mobile-demo" class="sidenav-trigger right black"><i class="fas fa-bars"></i></a>
             <ul class="right hide-on-med-and-down">
                 <li><a href="{{ url_for('dashboard') }}" class="black-text">Home</a></li> 
-                <li><a href="{{ url_for('register') }}" class="black-text" >Register</a></li>  
+                <li><a href="{{ url_for('register') }}" class="black-text" >Register</a></li>
                 <li><a href="{{ url_for('login') }}" class="black-text">Log In</a></li>
+                <li><a href="{{ url_for('logout') }}" class="black-text">logout</a></li>
                 <li><a href="{{ url_for('choose_intention') }}" class="black-text">Choose Intention</a></li>
                 <li><a href="{{ url_for('add_intention') }}" class="black-text">Add Intentions</a></li>
-                <li><a href="{{ url_for('my_intentions')['Exercise_intentions_id'] }}" class="black-text">My Intentions</a></li>
+                <li><a href="" class="black-text">My Intentions</a></li>
                 
             </ul>
         </div>

@@ -15,35 +15,61 @@ def home_page():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        register = Users(
-            username=request.form.get("username"),
-            password=request.form.get("password")
+        # check if username already exists in db
+        existing_user = Users.query.filter_by(username=request.form.get("username").lower()).first()
+
+        if existing_user:
+            flash("Username already exists")
+            return redirect(url_for("register"))
+
+        new_user = Users(
+            username=request.form.get("username").lower(),
+            password=generate_password_hash(request.form.get("password"))
         )
-        db.session.add(register)
+
+        db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('register'))
+
         # put the new user into 'session' cookie
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
-        return redirect(url_for("add_profile", username=session["user"]))
+        return redirect(url_for("dashboard", username=session["user"]))
+
     return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user = Users.query.filter_by(username=username).first()
-        
-        if not user or not (user.password, password):
-            flash('Please check your login details and try again.')
-            return redirect(url_for("login"))
+        # check if username exists in db
+        existing_user = Users.query.filter_by(username=request.form.get("username").lower()).first()
+
+        if existing_user:
+            # ensure hashed password matches user input
+            if check_password_hash(existing_user.password, request.form.get("password")):
+                session["user"] = request.form.get("username").lower()
+                flash("Welcome, {}".format(request.form.get("username")))
+                return redirect(url_for("dashboard", username=session["user"]))
+
+            else:
+                # invalid password match
+                flash("Incorrect Username and/or Password")
+                return redirect(url_for("login"))
+
         else:
-            session["username"] = username
-            return redirect(url_for("dashboard"))
-        
+            # username doesn't exist
+            flash("Incorrect Username and/or Password")
+            return redirect(url_for("login"))
+
     return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    # remove user from session cookie
+    flash("You have been logged out")
+    session.pop("username")
+    return redirect(url_for("login"))
 
 
 @app.route("/dashboard")
@@ -51,9 +77,10 @@ def dashboard():
     if "username" in session:
         username = session["username"]
 
-    return render_template("dashboard.html", username=username)
+    return render_template("dashboard.html", username=session["user"])
 
     return render_template("dashboard.html")
+
 
 @app.route("/choose_intention")
 def choose_intention():
@@ -73,6 +100,7 @@ def add_category():
         db.session.commit()
         return redirect(url_for("choose_intention"))
     return render_template("add_intention.html", categories=categories)
+
 
 @app.route("/add_intention", methods=["GET", "POST"])
 def add_intention():
@@ -112,18 +140,15 @@ def exercise_intentions():
 
 
 @app.route("/my_intentions", methods=["GET", "POST"])
-def my_intentions():
+def my_intentions(exercise_intention_id):
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
     if request.method == "POST":
-        my_new_intention = My_intentions( 
-        intention_name = request.form.get("intention_name"),
-        health_score = request.form.get("health_score"),
-        due_date = request.form.get("due_date"),
-        intention_id = request.form.get("intention_id")
+        new=My_intentions(
+            intention_name=request.form.get("intention_name"),
+            health_score=request.form.get("health_score"),
+            due_date=request.form.get("due_date")
         )
-        print(my_new_intention)
-        db.session.add(my_new_intention)
+        db.session.add(new)
         db.session.commit()
-        
-
+    
     return render_template("my_intentions.html", exercise=exercise)
