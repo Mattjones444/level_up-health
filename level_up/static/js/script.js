@@ -4,6 +4,6 @@ $(document).ready(function(){
     
 
 $( "a" ).on( "click", function() {
-  $('#edit{{ Exercise_intentions.id}}').modal();
+  $('.modal-trigger').modal();
   $('.datepicker').datepicker();
 });

@@ -3,7 +3,7 @@ from level_up import app, db
 from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey
-from level_up.models import Users, Profile, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions
+from level_up.models import Users, Profile, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions
 
 
 @app.route("/")
@@ -68,7 +68,7 @@ def login():
 def logout():
     # remove user from session cookie
     flash("You have been logged out")
-    session.pop("username")
+    session.pop("user")
     return redirect(url_for("login"))
 
 
@@ -140,10 +140,10 @@ def exercise_intentions():
 
 
 @app.route("/my_intentions", methods=["GET", "POST"])
-def my_intentions(exercise_intention_id):
+def my_intentions():
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
     if request.method == "POST":
-        new=My_intentions(
+        new = My_intentions(
             intention_name=request.form.get("intention_name"),
             health_score=request.form.get("health_score"),
             due_date=request.form.get("due_date")
@@ -152,3 +152,11 @@ def my_intentions(exercise_intention_id):
         db.session.commit()
     
     return render_template("my_intentions.html", exercise=exercise)
+
+
+@app.route("/show_intentions")
+def show_intentions():
+    user_intentions = list(My_intentions.query.order_by(My_intentions.intention_name).all())
+    return render_template("my_intentions.html", user_intentions=user_intentions)
+
+

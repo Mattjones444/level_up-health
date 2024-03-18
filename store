@@ -1,1 +1,25 @@
-$('#modal').modal().modal('open');
+ <!-- Modal Structure -->
+    <div id="{{Exercise_intentions.id}}" class="modal modal-trigger">
+      <div class="modal-content">
+        <form method="POST" action="{{url_for('my_intentions')}}">
+            <div class="input-field col s12">
+              <input name="intention_name" readonly value="{{Exercise_intentions.intention_name}}" id="intention_name" type="text" class="validate">
+              <label for="intention_name"></label>
+            </div>
+            <div class="input-field col s12">
+              <input name="health_score" readonly value="" id="health_score" type="text" class="validate">
+              <label for="health_score">Health score:{{Exercise_intentions.health_score}}</label>
+              </div>
+            <div class="input-field col s12">
+               <label name="due_date" for="datepicker">Pick your date</label>
+               <input type="text" class="datepicker" id="due_date" name="due_date">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="{{url_for('my_intentions')}}" type="submit" class="modal-close waves-effect waves-green btn-flat">Set Intention</a>
+      </div>
+    </form>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

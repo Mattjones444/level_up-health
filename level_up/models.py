@@ -31,25 +31,22 @@ class Category(db.Model):
     category_name = db.Column(db.String(25), unique=True, nullable=False)
 
 
-class My_intentions(db.Model):
-    # schema for the user's intentions
-    id = db.Column(db.Integer, primary_key=True)
-    intention_name = db.Column(db.String(50), unique=True, nullable=False)
-    health_score = db.Column(db.Integer, unique=True, nullable=False)
-    due_date = db.Column(db.Date, nullable=False)
-    Profile_id = db.Column(db.Integer, db.ForeignKey("profile.id", ondelete="CASCADE"), nullable=False)
-
-
-    
-    
-
     def __repr__(self):
         # __repr__ to represent itself in the form of a string
         return self.category_name
 
 
+class My_intentions(db.Model):
+    # schema for the user's intentions
+    id = db.Column(db.Integer, primary_key=True)
+    intention_name = db.Column(db.String(50), unique=True, nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
+    due_date = db.Column(db.Date, nullable=False)
+    Profile_id = db.Column(db.Integer, db.ForeignKey("profile.id", ondelete="CASCADE"), nullable=False)
+
+
     def __repr__(self):
-        return f"#{self.id} - Hydration:{self.hydration}| Exercise:{self.exercise}| Mindfulness:{self.mindfulness}| Sleep:{self.sleep}"
+        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| due_date:{self.due_date}| profile_id:{self.profile_id}"
 
 
 
@@ -57,7 +54,7 @@ class Hydration_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
     category_name = db.Column(db.String, unique=False, nullable=False)
-    health_score = db.Column(db.Integer, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return self
@@ -68,7 +65,7 @@ class Exercise_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
     category_name = db.Column(db.String, unique=False, nullable=False,)
-    health_score = db.Column(db.Integer, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return self
@@ -78,7 +75,7 @@ class Mindfulness_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
     category_name = db.Column(db.String, unique=False, nullable=False)
-    health_score = db.Column(db.Integer, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return self
@@ -89,7 +86,7 @@ class Sleep_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
     category_name = db.Column(db.String, unique=False, nullable=False)
-    health_score = db.Column(db.Integer, unique=True, nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
  
     def __repr__(self):
         return self
