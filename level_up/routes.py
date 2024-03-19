@@ -3,6 +3,7 @@ from level_up import app, db
 from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey
+from datetime import datetime
 from level_up.models import Users, Profile, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions
 
 
@@ -30,12 +31,25 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        # put the new user into 'session' cookie
+         # put the new user into 'session' cookie
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
-        return redirect(url_for("dashboard", username=session["user"]))
+        return redirect(url_for("profile", username=session["user"]))
 
     return render_template("register.html")
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def add_profile():
+    if request.method == "POST":
+        smoker = "yes" if request.form.get("smoker") else "no"
+        profile = {
+            "profile_name": request.form.get("profile_name"),
+            "age": str(request.form['age']),
+            "height": str(request.form['height']),
+            "weight": int(request.form['weight']),
+        }
+        return render_template("add_profile.html",username=session["user"])
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -62,6 +76,8 @@ def login():
             return redirect(url_for("login"))
 
     return render_template("login.html")
+
+
 
 
 @app.route("/logout")
@@ -142,14 +158,23 @@ def exercise_intentions():
 @app.route("/my_intentions", methods=["GET", "POST"])
 def my_intentions():
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+
     if request.method == "POST":
-        new = My_intentions(
-            intention_name=request.form.get("intention_name"),
-            health_score=request.form.get("health_score"),
-            due_date=request.form.get("due_date")
-        )
-        db.session.add(new)
-        db.session.commit()
+        print(request.form.get("due_date"))
+
+
+        # profile = Profile.query.filter_by(name=session['user'])
+        # profile_id = profile[0].id
+
+        # new = My_intentions(
+        #     intention_name=request.form.get("intention_name"),
+        #     health_score=request.form.get("health_score"),
+        #     due_date=datetime.strptime(request.form['due_date'], '%b %d, %Y').date(),
+        #     Profile_id=profile_id
+        # )
+        
+        # db.session.add(new)
+        # db.session.commit()
     
     return render_template("my_intentions.html", exercise=exercise)
 

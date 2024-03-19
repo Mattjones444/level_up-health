@@ -1,4 +1,5 @@
 from level_up import db
+from datetime import datetime
 
 
 class Users(db.Model):
@@ -12,11 +13,10 @@ class Users(db.Model):
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    age = db.Column(db.Integer, unique=False, nullable=False)
-    height = db.Column(db.Integer, unique=False, nullable=False)
-    weight = db.Column(db.Integer, unique=False, nullable=False)
-    smoker = db.Column(db.Boolean, default=False, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    height = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Integer, nullable=False)
     intentions = db.relationship("My_intentions", backref="category", cascade="all, delete", lazy=True)
 
     
@@ -41,7 +41,7 @@ class My_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String(50), unique=True, nullable=False)
     health_score = db.Column(db.Integer, nullable=False)
-    due_date = db.Column(db.Date, nullable=False)
+    due_date = db.Column(db.Date, nullable=False,)
     Profile_id = db.Column(db.Integer, db.ForeignKey("profile.id", ondelete="CASCADE"), nullable=False)
 
 
