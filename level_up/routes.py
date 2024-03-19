@@ -4,7 +4,7 @@ from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey
 from datetime import datetime
-from level_up.models import Users, Profile, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions
+from level_up.models import Users, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions
 
 
 @app.route("/")
@@ -34,22 +34,10 @@ def register():
          # put the new user into 'session' cookie
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("dashboard", username=session["user"]))
 
     return render_template("register.html")
 
-
-@app.route("/profile", methods=["GET", "POST"])
-def add_profile():
-    if request.method == "POST":
-        smoker = "yes" if request.form.get("smoker") else "no"
-        profile = {
-            "profile_name": request.form.get("profile_name"),
-            "age": str(request.form['age']),
-            "height": str(request.form['height']),
-            "weight": int(request.form['weight']),
-        }
-        return render_template("add_profile.html",username=session["user"])
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -61,7 +49,7 @@ def login():
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(existing_user.password, request.form.get("password")):
-                session["user"] = request.form.get("username").lower()
+                session["user"] = request.form.get("username")
                 flash("Welcome, {}".format(request.form.get("username")))
                 return redirect(url_for("dashboard", username=session["user"]))
 
@@ -160,28 +148,27 @@ def my_intentions():
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
 
     if request.method == "POST":
-        print(request.form.get("due_date"))
+        user = Users.query.filter_by().first()
+        users_id = user.id
 
-
-        # profile = Profile.query.filter_by(name=session['user'])
-        # profile_id = profile[0].id
-
-        # new = My_intentions(
-        #     intention_name=request.form.get("intention_name"),
-        #     health_score=request.form.get("health_score"),
-        #     due_date=datetime.strptime(request.form['due_date'], '%b %d, %Y').date(),
-        #     Profile_id=profile_id
-        # )
+        new = My_intentions(
+        intention_name=request.form.get("intention_name"),
+        health_score=request.form.get("health_score"),
+        due_date=datetime.strptime(request.form['due_date'], '%b %d, %Y').date(),
+        Users_id=users_id
+        )
         
-        # db.session.add(new)
-        # db.session.commit()
+        db.session.add(new)
+        db.session.commit()
     
-    return render_template("my_intentions.html", exercise=exercise)
+    return render_template("my_intentions.html", exercise=exercise, new=new)
 
 
 @app.route("/show_intentions")
 def show_intentions():
     user_intentions = list(My_intentions.query.order_by(My_intentions.intention_name).all())
     return render_template("my_intentions.html", user_intentions=user_intentions)
+
+
 
 

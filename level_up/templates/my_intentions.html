@@ -14,8 +14,13 @@
         <span class="card-title">{{ My_intentions.intention_name}}</span>
       </div>
       <div class="card-action">
+        <div class="card-action">
+          <a class="btn-floating btn-medium halfway-fab waves-effect waves-light green left text center-align"></i>{{ My_intentions.health_score}}</a>
+          <a href="{{My_intentions.id}}" data-target='{{My_intentions.id}}' class="btn-floating btn halfway-fab waves-effect waves-light blue"><i class="fas fa-check"></i></a>
+        </div>
       </div>
     </div>
-    {% endfor %}
   </div>
+    {% endfor %}
+</div>
 {% endblock %}

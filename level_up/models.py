@@ -10,21 +10,6 @@ class Users(db.Model):
     def __repr__(self):
         return f"#{self.id} - Username:{self.username}| Password:{self.password}"
 
-
-class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    height = db.Column(db.Integer, nullable=False)
-    weight = db.Column(db.Integer, nullable=False)
-    intentions = db.relationship("My_intentions", backref="category", cascade="all, delete", lazy=True)
-
-    
-    def __repr__(self):
-        return f"#{self.id} - Name:{self.name}| Age:{self.age}| Height:{self.height}| Weight:{self.weight}| Smoker:{self.smoker}| My Intentions:{my_intentions}"
-
-
-
 class Category(db.Model):
     # schema for the Category model
     id = db.Column(db.Integer, primary_key=True)
@@ -39,14 +24,14 @@ class Category(db.Model):
 class My_intentions(db.Model):
     # schema for the user's intentions
     id = db.Column(db.Integer, primary_key=True)
-    intention_name = db.Column(db.String(50), unique=True, nullable=False)
+    intention_name = db.Column(db.String(50),nullable=False)
     health_score = db.Column(db.Integer, nullable=False)
     due_date = db.Column(db.Date, nullable=False,)
-    Profile_id = db.Column(db.Integer, db.ForeignKey("profile.id", ondelete="CASCADE"), nullable=False)
+    Users_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 
     def __repr__(self):
-        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| due_date:{self.due_date}| profile_id:{self.profile_id}"
+        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| due_date:{self.due_date}| Users_id:{self.users.id}"
 
 
 
