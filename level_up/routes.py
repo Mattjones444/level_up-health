@@ -4,7 +4,7 @@ from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey
 from datetime import datetime
-from level_up.models import Users, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions
+from level_up.models import Users, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions, My_completed_intentions
 
 
 @app.route("/")
@@ -168,6 +168,27 @@ def my_intentions():
 def show_intentions():
     user_intentions = list(My_intentions.query.order_by(My_intentions.intention_name).all())
     return render_template("my_intentions.html", user_intentions=user_intentions)
+
+
+@app.route("/completed_intentions", methods=["GET", "POST"])
+def completed_intentions():
+    exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+
+    if request.method == "POST":
+        user = Users.query.filter_by().first()
+        users_id = user.id
+
+        completed_intention = My_completed_intentions(
+        intention_name=request.form.get("intention_name"),
+        health_score=request.form.get("health_score"),
+        Users_id=users_id
+        )
+        
+        db.session.add(completed_intention)
+        db.session.commit()
+    
+    return render_template("completed_intentions.html", completed_intention=completed_intention)
+
 
 
 

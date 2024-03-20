@@ -35,6 +35,18 @@ class My_intentions(db.Model):
 
 
 
+class My_completed_intentions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    intention_name = db.Column(db.String(50),nullable=False)
+    health_score = db.Column(db.Integer, nullable=False)
+    Users_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
+
+    def __repr__(self):
+        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| Users_id:{self.users.id}"
+
+
+
 class Hydration_intentions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     intention_name = db.Column(db.String, unique=True, nullable=False)
