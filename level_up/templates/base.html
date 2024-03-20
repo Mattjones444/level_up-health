@@ -22,7 +22,7 @@
                 <li><a href="{{ url_for('logout') }}" class="black-text">logout</a></li>
                 <li><a href="{{ url_for('choose_intention') }}" class="black-text">Choose Intention</a></li>
                 <li><a href="{{url_for('show_intentions')}}" class="black-text">My Intentions</a></li>
-                <li><a href="{{url_for('completed_intentions')}}" class="black-text">Completed Intentions</a></li>
+                <li><a href="{{url_for('my_completed_intentions')}}" class="black-text">Completed Intentions</a></li>
                  {% else %}
                 <li><a href="{{ url_for('register') }}" class="black-text" >Register</a></li>
                 <li><a href="{{ url_for('login') }}" class="black-text">Log In</a></li>

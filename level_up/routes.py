@@ -170,8 +170,9 @@ def show_intentions():
     return render_template("my_intentions.html", user_intentions=user_intentions)
 
 
-@app.route("/completed_intentions", methods=["GET", "POST"])
-def completed_intentions():
+@app.route("/my_completed_intentions", methods=["GET", "POST"])
+def my_completed_intentions():
+    completed_intention = None 
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
 
     if request.method == "POST":
@@ -186,8 +187,12 @@ def completed_intentions():
         
         db.session.add(completed_intention)
         db.session.commit()
-    
+
+    completed_intention = My_completed_intentions.query.all()
+
     return render_template("completed_intentions.html", completed_intention=completed_intention)
+
+
 
 
 
