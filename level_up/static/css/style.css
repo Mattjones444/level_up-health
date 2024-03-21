@@ -5,3 +5,17 @@ body{
 .modal{
     height: 80%;
 }
+
+.dashboard-panel{
+    width:60%;
+    height:400px;
+    background-color: lightgrey;
+    margin:auto;
+    margin-top:30px;
+}
+
+.dash-card{
+    margin-top: 25px;
+
+}
+

@@ -80,10 +80,14 @@ def logout():
 def dashboard():
     if "username" in session:
         username = session["username"]
+    
+    total_intentions_count = My_completed_intentions.query.count()
 
-    return render_template("dashboard.html", username=session["user"])
+    total_health_scores = db.session.query(db.func.sum(My_completed_intentions.health_score)).scalar()
 
-    return render_template("dashboard.html")
+    average_health_score = db.session.query(db.func.avg(My_completed_intentions.health_score)).scalar()
+
+    return render_template("dashboard.html", username=session["user"],total_intentions_count=total_intentions_count,total_health_scores=total_health_scores, average_health_score=average_health_score)
 
 
 @app.route("/choose_intention")
