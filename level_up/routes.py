@@ -150,6 +150,7 @@ def exercise_intentions():
 @app.route("/my_intentions", methods=["GET", "POST"])
 def my_intentions():
     exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+    new = None 
 
     if request.method == "POST":
         user = Users.query.filter_by().first()
@@ -195,6 +196,16 @@ def my_completed_intentions():
     completed_intention = My_completed_intentions.query.all()
 
     return render_template("completed_intentions.html", completed_intention=completed_intention)
+
+
+@app.route("/delete_intention/<int:intention_id>", methods=["GET", "POST"])
+def delete_intention(intention_id):
+    intention_to_delete = My_intentions.query.get(intention_id)
+    if intention_to_delete:
+        db.session.delete(intention_to_delete)
+        db.session.commit()
+        return redirect(url_for("my_intentions"))
+    
 
 
 
