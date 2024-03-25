@@ -157,7 +157,6 @@ def my_intentions():
 
     if request.method == "POST":
         user_id = session['user_id']
-        print(user_id)
 
         new = My_intentions(
         intention_name=request.form.get("intention_name"),
@@ -168,6 +167,7 @@ def my_intentions():
         
         db.session.add(new)
         db.session.commit()
+        return redirect(url_for("my_intentions"))
 
 
     return render_template("my_intentions.html", new=new, user_intentions=user_intentions)
