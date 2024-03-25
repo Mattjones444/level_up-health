@@ -81,12 +81,12 @@ def logout():
 
 @app.route("/dashboard")
 def dashboard():
-    if "username" in session:
-        username = session["username"]
+    user_id = session['user_id']
+    completed_intention = My_completed_intentions.query.filter_by(user_id=user_id).order_by(My_completed_intentions.intention_name).all()
     
-    total_intentions_count = My_completed_intentions.query.count()
-    total_health_scores = db.session.query(db.func.sum(My_completed_intentions.health_score)).scalar()
-    average_health_score = db.session.query(db.func.avg(My_completed_intentions.health_score)).scalar()
+    total_intentions_count = My_completed_intentions.query.filter_by(user_id=user_id).count()
+    total_health_scores = My_completed_intentions.query.with_entities(func.sum(My_completed_intentions.health_score)).filter_by(user_id=user_id).scalar()
+    average_health_score = My_completed_intentions.query.with_entities(db.func.avg(My_completed_intentions.health_score)).filter_by(user_id=user_id).scalar()
 
     return render_template("dashboard.html", username=session["user"],total_intentions_count=total_intentions_count,total_health_scores=total_health_scores, average_health_score=average_health_score)
 
@@ -150,7 +150,6 @@ def exercise_intentions():
 
 @app.route("/my_intentions", methods=["GET", "POST"])
 def my_intentions():
-    #exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
     new = None 
     user_id = session['user_id']
     user_intentions = My_intentions.query.filter_by(user_id=user_id).order_by(My_intentions.intention_name).all()
@@ -192,24 +191,24 @@ def my_intentions():
 @app.route("/my_completed_intentions", methods=["GET", "POST"])
 def my_completed_intentions():
     completed_intention = None 
-    exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+    user_id = session['user_id']
+    user_intentions = My_intentions.query.filter_by(user_id=user_id).order_by(My_intentions.intention_name).all()
+    
 
     if request.method == "POST":
-        user = Users.query.filter_by().first()
-        users_id = user.id
 
         completed_intention = My_completed_intentions(
         intention_name=request.form.get("intention_name"),
         health_score=request.form.get("health_score"),
-        Users_id=users_id
+        user_id=user_id
         )
         
         db.session.add(completed_intention)
         db.session.commit()
 
-    completed_intention = My_completed_intentions.query.all()
+    completed_intention = My_completed_intentions.query.filter_by(user_id=user_id).order_by(My_completed_intentions.intention_name).all()
 
-    return render_template("completed_intentions.html", completed_intention=completed_intention)
+    return render_template("completed_intentions.html", user_intentions=user_intentions, completed_intention=completed_intention)
 
 
 @app.route("/delete_intention/<int:intention_id>", methods=["GET", "POST"])
