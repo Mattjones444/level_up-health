@@ -27,11 +27,11 @@ class My_intentions(db.Model):
     intention_name = db.Column(db.String(50),nullable=False)
     health_score = db.Column(db.Integer, nullable=False)
     due_date = db.Column(db.Date, nullable=False,)
-    Users_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 
     def __repr__(self):
-        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| due_date:{self.due_date}| Users_id:{self.users.id}"
+        return f"#{self.id} - intention_name:{self.intention_name}| health_score:{self.health_score}| due_date:{self.due_date}| user_id:{self.user.id}"
 
 
 

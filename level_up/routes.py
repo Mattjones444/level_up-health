@@ -3,6 +3,7 @@ from level_up import app, db
 from flask import request,redirect,url_for,flash,session
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import ForeignKey
+from sqlalchemy import func
 from datetime import datetime
 from level_up.models import Users, Category, Hydration_intentions, Exercise_intentions, Sleep_intentions, Mindfulness_intentions, My_intentions, My_completed_intentions
 
@@ -50,6 +51,8 @@ def login():
             # ensure hashed password matches user input
             if check_password_hash(existing_user.password, request.form.get("password")):
                 session["user"] = request.form.get("username")
+                session["user_id"] = existing_user.id
+                print(existing_user.id)
                 flash("Welcome, {}".format(request.form.get("username")))
                 return redirect(url_for("dashboard", username=session["user"]))
 
@@ -82,9 +85,7 @@ def dashboard():
         username = session["username"]
     
     total_intentions_count = My_completed_intentions.query.count()
-
     total_health_scores = db.session.query(db.func.sum(My_completed_intentions.health_score)).scalar()
-
     average_health_score = db.session.query(db.func.avg(My_completed_intentions.health_score)).scalar()
 
     return render_template("dashboard.html", username=session["user"],total_intentions_count=total_intentions_count,total_health_scores=total_health_scores, average_health_score=average_health_score)
@@ -149,30 +150,43 @@ def exercise_intentions():
 
 @app.route("/my_intentions", methods=["GET", "POST"])
 def my_intentions():
-    exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
+    #exercise = list(Exercise_intentions.query.order_by(Exercise_intentions.intention_name).all())
     new = None 
+    user_id = session['user_id']
+    user_intentions = My_intentions.query.filter_by(user_id=user_id).order_by(My_intentions.intention_name).all()
+    
 
     if request.method == "POST":
-        user = Users.query.filter_by().first()
-        users_id = user.id
+        user_id = session['user_id']
+        print(user_id)
 
         new = My_intentions(
         intention_name=request.form.get("intention_name"),
         health_score=request.form.get("health_score"),
         due_date=datetime.strptime(request.form['due_date'], '%b %d, %Y').date(),
-        Users_id=users_id
+        user_id=user_id
         )
         
         db.session.add(new)
         db.session.commit()
-    
-    return render_template("my_intentions.html", exercise=exercise, new=new)
 
 
-@app.route("/show_intentions")
-def show_intentions():
-    user_intentions = list(My_intentions.query.order_by(My_intentions.intention_name).all())
-    return render_template("my_intentions.html", user_intentions=user_intentions)
+    return render_template("my_intentions.html", new=new, user_intentions=user_intentions)
+
+
+# @app.route("/show_intentions")
+# def show_intentions():
+#     user_id = session['user_id']
+#     user_intentions = My_intentions.query.filter_by(existing_user.id).order_by(My_intentions.intention_name).all()
+#     return render_template("my_intentions.html", user_intentions=user_intentions)
+
+
+#@app.route("/show_intentions")
+#def show_intentions():
+    #user_id = session['user_id']
+    #print(user_id)
+    #user_intentions = My_intentions.query.filter_by(users_id=user_id).order_by(My_intentions.intention_name).all()
+    #return render_template("my_intentions.html", user_intentions=user_intentions)
 
 
 @app.route("/my_completed_intentions", methods=["GET", "POST"])
